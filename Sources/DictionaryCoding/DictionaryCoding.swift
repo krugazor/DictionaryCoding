@@ -6,7 +6,7 @@ import Foundation
 
 public class DictionaryCodingError : Error {
     public let reason : String
-    init(_ msg : String = "Unspecified error") {
+    public init(_ msg : String = "Unspecified error") {
         reason = msg
     }
 }
@@ -19,6 +19,8 @@ public enum CoderResult {
 }
 
 public class DictionaryCoding  {
+	public init() {} // to work outside of module
+	
     public func encode<T : Encodable>(_ value: T) throws -> CoderResult {
         let encoder = _DictionaryEncoder()
         try value.encode(to: encoder)
