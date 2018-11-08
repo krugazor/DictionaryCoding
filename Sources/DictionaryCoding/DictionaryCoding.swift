@@ -540,6 +540,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         case .single(let v):
             if let val = v as? String { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
+            if let val = v as? String { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
             throw DictionaryCodingError("Trying to decode wrong type")
         }
@@ -549,6 +552,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         guard let l = self.storage.last else { throw DictionaryCodingError("Trying to decode past last container") }
         switch l {
         case .single(let v):
+            if let val = v as? Double { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
             if let val = v as? Double { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
@@ -562,6 +568,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         case .single(let v):
             if let val = v as? Float { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
+            if let val = v as? Float { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
             throw DictionaryCodingError("Trying to decode wrong type")
         }
@@ -571,6 +580,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         guard let l = self.storage.last else { throw DictionaryCodingError("Trying to decode past last container") }
         switch l {
         case .single(let v):
+            if let val = v as? Int { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
             if let val = v as? Int { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
@@ -584,6 +596,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         case .single(let v):
             if let val = v as? Int8 { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
+            if let val = v as? Int8 { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
             throw DictionaryCodingError("Trying to decode wrong type")
         }
@@ -593,6 +608,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         guard let l = self.storage.last else { throw DictionaryCodingError("Trying to decode past last container") }
         switch l {
         case .single(let v):
+            if let val = v as? Int16 { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
             if let val = v as? Int16 { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
@@ -606,6 +624,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         case .single(let v):
             if let val = v as? Int32 { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
+            if let val = v as? Int32 { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
             throw DictionaryCodingError("Trying to decode wrong type")
         }
@@ -615,6 +636,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         guard let l = self.storage.last else { throw DictionaryCodingError("Trying to decode past last container") }
         switch l {
         case .single(let v):
+            if let val = v as? Int64 { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
             if let val = v as? Int64 { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
@@ -628,6 +652,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         case .single(let v):
             if let val = v as? UInt { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
+            if let val = v as? UInt { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
             throw DictionaryCodingError("Trying to decode wrong type")
         }
@@ -637,6 +664,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         guard let l = self.storage.last else { throw DictionaryCodingError("Trying to decode past last container") }
         switch l {
         case .single(let v):
+            if let val = v as? UInt8 { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
             if let val = v as? UInt8 { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
@@ -650,6 +680,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         case .single(let v):
             if let val = v as? UInt16 { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
+            if let val = v as? UInt16 { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
             throw DictionaryCodingError("Trying to decode wrong type")
         }
@@ -661,6 +694,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         case .single(let v):
             if let val = v as? UInt32 { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
+            if let val = v as? UInt32 { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
             throw DictionaryCodingError("Trying to decode wrong type")
         }
@@ -670,6 +706,9 @@ extension _DictionaryDecoder : SingleValueDecodingContainer {
         guard let l = self.storage.last else { throw DictionaryCodingError("Trying to decode past last container") }
         switch l {
         case .single(let v):
+            if let val = v as? UInt64 { return val }
+            else { throw DictionaryCodingError("Trying to decode wrong type") }
+        case .decodable(let v): // enums fit in this category
             if let val = v as? UInt64 { return val }
             else { throw DictionaryCodingError("Trying to decode wrong type") }
         default:
