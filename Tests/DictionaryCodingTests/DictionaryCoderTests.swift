@@ -33,6 +33,24 @@ struct CompoundTest : Codable, Equatable {
 
 }
 
+enum EnumTest : String, Codable {
+    case one
+    case two
+    case three
+}
+
+enum EnumIntTest : Int, Codable {
+    case one = 0
+    case two = 1
+    case three = 2
+}
+
+struct EnumCompoundTest: Codable, Equatable {
+    var msg : String
+    var type : EnumTest
+    var itype : EnumIntTest
+}
+
 final class DictionaryCodingTests: XCTestCase {
     func testSimple() {
         let now = Date()
@@ -52,7 +70,36 @@ final class DictionaryCodingTests: XCTestCase {
             XCTFail()
         }
     }
-
+    
+    func testEnum() {
+        let m = "This is a test"
+        let t = EnumTest.one
+        let t2 = EnumIntTest.one
+        let test = EnumCompoundTest(msg: m, type: t, itype: t2)
+        
+        guard let r = try? DictionaryCoding().encode(test) else { XCTFail() ; return }
+        
+        var encoded : [String:Any?]? = nil
+        switch r {
+        case .dictionary(let d):
+            XCTAssert(d.keys.count == 3)
+            XCTAssert(((d["msg"] as? String) ?? "") == m)
+            XCTAssert((d["type"] as? String) == t.rawValue)
+            XCTAssert((d["itype"] as? Int) == t2.rawValue)
+            encoded = d
+        default:
+            XCTFail()
+        }
+        
+        guard let e = try? DictionaryCoding().decode(EnumCompoundTest.self, from: encoded) else {
+            XCTFail()
+            return
+        }
+        XCTAssert(e.msg == m)
+        XCTAssert(e.type == t)
+        XCTAssert(e.itype == t2)
+    }
+    
     func testArray() {
         let test = ["0", "1", "2"]
         guard let r = try? DictionaryCoding().encode(test) else { XCTFail() ; return }
@@ -150,7 +197,7 @@ final class DictionaryCodingTests: XCTestCase {
         let m2 = "This is a test"
         let i2 = UInt64(2)
         let test2 = SimpleTest(msg: m2, timestamp: now2, iteration: i2, nullable: nil)
-
+        
         let compound = CompoundTest(msg: "compound", array: [test, test2], dic: ["first":test, "second":test2])
         
         guard let encodedT = try? DictionaryCoding().encode(compound) else { XCTFail() ; return }
@@ -168,8 +215,49 @@ final class DictionaryCodingTests: XCTestCase {
         XCTAssert(decoded == compound)
     }
     
+    func testTime() {
+        let now = Date()
+        
+        let max = 100000
+        // loop json
+        var start = Date()
+        for i in 0...max {
+            let t = SimpleTest(msg: "test \(i)", timestamp: now.addingTimeInterval(Double(i/10)), iteration: UInt64(i), nullable: "vOv \(i)")
+            let c = CompoundTest(msg: "\(i)", array: [t], dic: ["test":t])
+            
+            if let e = try? JSONEncoder().encode(c) {
+                let _ = try? JSONDecoder().decode(CompoundTest.self, from: e)
+            }
+        }
+        print("time for json: \(Date().timeIntervalSince(start))")
+        
+        start = Date()
+        for i in 0...max {
+            let t = SimpleTest(msg: "test \(i)", timestamp: now.addingTimeInterval(Double(i/10)), iteration: UInt64(i), nullable: "vOv \(i)")
+            let c = CompoundTest(msg: "\(i)", array: [t], dic: ["test":t])
+            
+            if let e = try? JSONEncoder().encode(c), let s = String(data: e, encoding: .utf8), let ee = s.data(using: .utf8) {
+                let _ = try? JSONDecoder().decode(CompoundTest.self, from: ee)
+            }
+        }
+        print("time for json+text: \(Date().timeIntervalSince(start))")
+        
+        // loop dic
+        start = Date()
+        for i in 0...max {
+            let t = SimpleTest(msg: "test \(i)", timestamp: now.addingTimeInterval(Double(i/10)), iteration: UInt64(i), nullable: "vOv \(i)")
+            let c = CompoundTest(msg: "\(i)", array: [t], dic: ["test":t])
+            
+            if let e = try? DictionaryCoding().encode(c), case let .dictionary(d) = e {
+                let _ = try? DictionaryCoding().decode(CompoundTest.self, from: d)
+            }
+        }
+        print("time for dic: \(Date().timeIntervalSince(start))")
+     }
+    
     static var allTests = [
         ("testSimple", testSimple), ("testArray", testArray), ("testCompound", testCompound),
+        ("testEnum", testEnum),
         ("testSimpleDecode", testSimpleDecode), ("testDictionaryDecode", testDictionaryDecode),
         ("testLoop", testLoop)
     ]
