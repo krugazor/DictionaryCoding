@@ -7,53 +7,51 @@ import Foundation
 // A stupid workaround for reference variables without using the NSMutable*
 
 class DictionaryWrapper {
-    private var storage : [String:Any?] = [:]
-    
-    var count : Int { return storage.count }
-    
+    private var storage: [String: Any?] = [:]
+
+    var count: Int { return storage.count }
+
     subscript(key: String) -> Any? {
         get {
-            if let v = storage[key] { return v }
-            else { return nil }
+            if let sval = storage[key] { return sval } else { return nil }
         }
-        
+
         set(newValue) {
             storage[key] = newValue
         }
     }
-    
-    var unwrapped : [String:Any?] {
-        var result = [String:Any?]()
+
+    var unwrapped: [String: Any?] {
+        var result = [String: Any?]()
         result.merge(storage) { $1 }
         return result
     }
 }
 
 class ArrayWrapper {
-    private var storage : [Any?] = []
+    private var storage: [Any?] = []
 
-    var count : Int { return storage.count }
+    var count: Int { return storage.count }
 
     subscript(index: Int) -> Any? {
         get {
-            if let v = storage[index] { return v }
-            else { return nil }
+            if let sval = storage[index] { return sval } else { return nil }
         }
-        
+
         set(newValue) {
             storage[index] = newValue
         }
     }
-    
-    func insert(_ v: Any?, at index: Int) {
-        storage.insert(v, at: index)
+
+    func insert(_ sval: Any?, at index: Int) {
+        storage.insert(sval, at: index)
     }
-    
-    func append(_ v: Any?) {
-        storage.append(v)
+
+    func append(_ sval: Any?) {
+        storage.append(sval)
     }
-    
-    var unwrapped : [Any?] {
+
+    var unwrapped: [Any?] {
         var result = [Any?]()
         result.append(contentsOf: storage)
         return result
